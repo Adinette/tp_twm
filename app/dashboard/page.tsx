@@ -1,68 +1,65 @@
 'use client'
-import { useSession, signOut } from "next-auth/react"
-import { useRouter } from "next/navigation"
+import { useSession } from "next-auth/react"
+import Link from "next/link"
 
 export default function DashboardPage() {
-  const { data: session, status } = useSession()
-  const router = useRouter()
-
-  if (status === "loading") {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p className="text-lg">Chargement...</p>
-      </div>
-    )
-  }
-
-  if (!session) {
-    router.push("/front/auth/login")
-    return null
-  }
+  const { data: session } = useSession()
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-black">
-      <nav className="bg-white dark:bg-zinc-900 shadow px-6 py-4 flex items-center justify-between">
-        <h1 className="text-xl font-bold">Projet TWM - Dashboard</h1>
-        <div className="flex items-center gap-4">
-          <span className="text-sm text-zinc-600 dark:text-zinc-400">
-            {session.user?.name} ({session.user?.email})
-          </span>
-          <button
-            onClick={() => signOut({ callbackUrl: "/front/auth/login" })}
-            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm transition-colors"
-          >
-            Déconnexion
-          </button>
-        </div>
-      </nav>
-
-      <main className="max-w-4xl mx-auto py-12 px-6">
-        <h2 className="text-2xl font-semibold mb-4">
-          Bienvenue, {session.user?.name} !
-        </h2>
-        <p className="text-zinc-600 dark:text-zinc-400 mb-8">
-          Vous êtes connecté au tableau de bord du projet TWM.
+    <div className="p-6 lg:p-10">
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold mb-2">
+          Bienvenue, {session?.user?.name} !
+        </h1>
+        <p className="text-zinc-500">
+          Vue d&apos;ensemble de votre espace projet TWM.
         </p>
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-white dark:bg-zinc-900 rounded-xl shadow p-6">
-            <h3 className="font-semibold text-lg mb-2">Microservices</h3>
-            <p className="text-sm text-zinc-500">Gestion des microservices de l&apos;application</p>
-          </div>
-          <div className="bg-white dark:bg-zinc-900 rounded-xl shadow p-6">
-            <h3 className="font-semibold text-lg mb-2">Utilisateurs</h3>
-            <p className="text-sm text-zinc-500">Gestion des comptes et des accès</p>
-          </div>
-          <div className="bg-white dark:bg-zinc-900 rounded-xl shadow p-6">
-            <h3 className="font-semibold text-lg mb-2">API</h3>
-            <p className="text-sm text-zinc-500">Documentation et test des endpoints</p>
-          </div>
-          <div className="bg-white dark:bg-zinc-900 rounded-xl shadow p-6">
-            <h3 className="font-semibold text-lg mb-2">Paramètres</h3>
-            <p className="text-sm text-zinc-500">Configuration de l&apos;application</p>
-          </div>
+      {/* Stats */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-5">
+          <p className="text-sm text-zinc-500 mb-1">Microservices</p>
+          <p className="text-2xl font-bold">3</p>
+          <p className="text-xs text-green-600 mt-1">Tous actifs</p>
         </div>
-      </main>
+        <div className="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-5">
+          <p className="text-sm text-zinc-500 mb-1">Endpoints API</p>
+          <p className="text-2xl font-bold">6</p>
+          <p className="text-xs text-zinc-400 mt-1">REST</p>
+        </div>
+        <div className="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-5">
+          <p className="text-sm text-zinc-500 mb-1">Base de données</p>
+          <p className="text-2xl font-bold">PostgreSQL</p>
+          <p className="text-xs text-green-600 mt-1">Connectée</p>
+        </div>
+        <div className="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-5">
+          <p className="text-sm text-zinc-500 mb-1">Auth Provider</p>
+          <p className="text-2xl font-bold">2</p>
+          <p className="text-xs text-zinc-400 mt-1">Credentials + Google</p>
+        </div>
+      </div>
+
+      {/* Cards */}
+      <h2 className="text-lg font-semibold mb-4">Accès rapide</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Link href="/dashboard/profile" className="group bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-6 hover:border-blue-300 dark:hover:border-blue-700 transition-colors">
+          <h3 className="font-semibold text-lg mb-2 group-hover:text-blue-600 transition-colors">Mon profil</h3>
+          <p className="text-sm text-zinc-500">Consultez et modifiez vos informations personnelles.</p>
+        </Link>
+        <Link href="/dashboard/services" className="group bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-6 hover:border-blue-300 dark:hover:border-blue-700 transition-colors">
+          <h3 className="font-semibold text-lg mb-2 group-hover:text-blue-600 transition-colors">Microservices</h3>
+          <p className="text-sm text-zinc-500">Gérez et surveillez les microservices de l&apos;application.</p>
+        </Link>
+        <div className="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-6">
+          <h3 className="font-semibold text-lg mb-2">API</h3>
+          <p className="text-sm text-zinc-500">Documentation et test des endpoints REST.</p>
+        </div>
+        <Link href="/dashboard/settings" className="group bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-6 hover:border-blue-300 dark:hover:border-blue-700 transition-colors">
+          <h3 className="font-semibold text-lg mb-2 group-hover:text-blue-600 transition-colors">Paramètres</h3>
+          <p className="text-sm text-zinc-500">Configuration de l&apos;application et préférences.</p>
+        </Link>
+      </div>
     </div>
   )
 }

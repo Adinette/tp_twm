@@ -38,6 +38,10 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# docs/ — ignorer les rapports Word générés, garder les scripts et le guide
+docs/*.docx
+docs/~$*.docx
 next-env.d.ts
 
 /app/generated/prisma

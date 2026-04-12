@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Stock {
+  id           Int      @id @default(autoincrement())
+  productId    Int      @map("product_id")
+  productName  String   @map("product_name") @db.VarChar(255)
+  warehouseId  Int      @map("warehouse_id")
+  warehouse    String   @db.VarChar(255)
+  quantity     Int      @default(0)
+  minThreshold Int      @default(10) @map("min_threshold")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("stocks")
+}
+
+model Movement {
+  id          Int      @id @default(autoincrement())
+  productId   Int      @map("product_id")
+  productName String   @map("product_name") @db.VarChar(255)
+  warehouseId Int      @map("warehouse_id")
+  type        String   @db.VarChar(3)
+  quantity    Int
+  reason      String?  @db.VarChar(255)
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("movements")
+}

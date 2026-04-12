@@ -1,0 +1,18 @@
+import { PrismaPg } from '@prisma/adapter-pg'
+import 'dotenv/config'
+import { Pool } from 'pg'
+import { defineConfig } from 'prisma/config'
+
+export default defineConfig({
+  earlyAccess: true,
+  schema: './prisma/schema.prisma',
+  migrate: {
+    async adapter() {
+      const pool = new Pool({ connectionString: process.env.DATABASE_URL })
+      return new PrismaPg(pool)
+    },
+  },
+  datasource: {
+    url: process.env.DATABASE_URL!,
+  },
+})

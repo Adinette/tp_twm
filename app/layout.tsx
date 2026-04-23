@@ -4,6 +4,9 @@ import "./globals.css";
 import Providers from "./providers";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import { resolveAuthSessionConfig } from "./lib/auth-session-config";
+import ConditionalFooter from "./components/ConditionalFooter";
+import ConditionalNavbar from "./components/ConditionalNavbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,16 +28,21 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const sessionConfig = resolveAuthSessionConfig();
+
   return (
     <html
       lang="fr"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <Providers>
-          <Navbar />
+        <Providers
+          idleTimeoutSeconds={sessionConfig.idleTimeoutSeconds}
+          idleWarningSeconds={sessionConfig.idleWarningSeconds}
+        >
+          <ConditionalNavbar />
           <main className="flex-1">{children}</main>
-          <Footer />
+          <ConditionalFooter />
         </Providers>
       </body>
     </html>
